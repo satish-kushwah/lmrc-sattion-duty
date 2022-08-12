@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+	<title>LMRC Station Duty Calculator</title>
+</head>
+
+<body>
+	<div class="container my-3">
+		<h4 class="text-success">LMRC Station duty calculator</h4>
+		<p>Duty cycle is Night-1, Night-2, Night-3, Night-4, Night-5, Night-6, Night-7, Rest-1, Evening-1, Evening-2,
+			Evening-3,
+			Evening-4, Evening-5, Evening-6, Evening-7, Rest-2, Morning-1, Morning-2, Morning-3, Morning-4, Rest-3</p>
+		<b>Today's date</b>
+		<p id="date"></p>
+		<script>
+			document.getElementById("date").innerHTML = Date();
+		</script>
+		<div>
+			<div class='mb-3'>
+				<label class='form-label float-start fw-bold'>Select today's duty</label>
+				<select class="form-select my-2" id='todayDuty'>
+					<option>Night-1</option>
+					<option>Night-2</option>
+					<option>Night-3</option>
+					<option>Night-4</option>
+					<option>Night-5</option>
+					<option>Night-6</option>
+					<option>Night-7</option>
+					<option>Rest-1</option>
+					<option>Evening-1</option>
+					<option>Evening-2</option>
+					<option>Evening-3</option>
+					<option>Evening-4</option>
+					<option>Evening-5</option>
+					<option>Evening-6</option>
+					<option>Evening-7</option>
+					<option>Rest-2</option>
+					<option>Morning-1</option>
+					<option>Morning-2</option>
+					<option>Morning-3</option>
+					<option>Morning-4</option>
+					<option>Rest-3</option>
+				</select>
+			</div>
+			<div class='mb-3'>
+				<label class='form-label float-start fw-bold'>Select upcoming date to view duty</label>
+				<input type="date" id="dutyDate" class='form-control my-2'>
+				<script>
+					var now = new Date();
+					var month = (now.getMonth() + 1);
+					var day = now.getDate();
+					if (month < 10)
+						month = "0" + month;
+					if (day < 10)
+						day = "0" + day;
+					var today = now.getFullYear() + '-' + month + '-' + day;
+					$('#dutyDate').val(today);
+				</script>
+			</div>
+			<button class='btn btn-primary' id='btn'>View Duty</button>
+		</div>
+		<hr>
+		<div class="my-3">
+
+			<table class="table-light table table-striped table-bordered">
+				<thead>
+					<th>Date</th>
+					<th>Duty</th>
+				</thead>
+				<tbody id='duties'>
+
+				</tbody>
+			</table>
+		</div>
+		<script>
+			$(document).ready(function () {
+				$("#btn").click(function () {
+					const dutyCycle = ["Night-1", "Night-2", "Night-3", "Night-4", "Night-5", "Night-6", "Night-7", "Rest-1", "Evening-1", "Evening-2", "Evening-3", "Evening-4", "Evening-5", "Evening-6", "Evening-7", "Rest-2", "Morning-1", "Morning-2", "Morning-3", "Morning-4", "Rest-3"];
+					var endDate = new Date($('#dutyDate').val());
+					var startDate = new Date();
+					var diffTime = Math.abs(endDate - startDate);
+					var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+					$("tbody").empty();
+					var curDuty = $('#todayDuty').val();
+					let index = dutyCycle.indexOf(curDuty);
+					for (let i = 0; i < diffDays + 1; i++) {
+						// var now = new Date();
+						var month = (startDate.getMonth() + 1);
+						var day = startDate.getDate();
+						var today = day + "-" + month + "-" + startDate.getFullYear();
+						$("tbody").append("<tr>\
+			  	                    <td>"+ today + "</td>\
+			  	                    <td>"+ dutyCycle[index] + "</td>\
+			  	                </tr>");
+						index = index + 1;
+						if (index >= 21)
+							index = 0;
+						startDate.setDate(startDate.getDate() + 1);
+					}
+				});
+			});
+
+		</script>
+		<i class="float-end text-danger my-5">Developer: Satish Kushwah</i>
+	</div>
+	<!-- Optional JavaScript; choose one of the two! -->
+
+	<!-- Option 1: Bootstrap Bundle with Popper -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+		crossorigin="anonymous"></script>
+	<!-- Option 2: Separate Popper and Bootstrap JS -->
+	<!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>
